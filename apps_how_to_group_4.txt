@@ -1,0 +1,59 @@
+========================================================================
+PANDUAN INSTALASI & PENGGUNAAN (USER MANUAL)
+APLIKASI MULTI-AGENT SYSTEM (MAS) FOR GRAPH PATTERN MATCHING
+========================================================================
+
+A. INFORMASI SISTEM
+------------------------------------------------------------------------
+Sistem ini adalah simulasi Multi-Agent yang bertugas mencari pola (Pattern Matching) 
+pada struktur data Graph. Sistem menggabungkan modul Pre-processing Data 
+dan Modul Intelligent Agents (Reasoner, Planner, Searcher).
+
+B. PRASYARAT SISTEM (REQUIREMENTS)
+------------------------------------------------------------------------
+1. Platform : Google Colab (Recommended)
+2. Bahasa   : Python 3.x
+3. Library  : pandas, networkx, numpy, time
+
+C. LANGKAH EKSEKUSI (URUTAN JALANNYA PROGRAM)
+------------------------------------------------------------------------
+Pastikan menjalankan Cell Code secara berurutan dari atas ke bawah:
+
+[MODULE 1] DATA GENERATION & PRE-PROCESSING
+(Bagian ini memproses Raw Data menjadi Dataset siap pakai)
+1. Jalankan Cell pertama.
+2. Sistem akan melakukan cleaning data dan transformasi graph.
+3. Output: File 'synthetic_graph_data.csv' akan otomatis terbuat.
+   > CATATAN: Langkah ini krusial agar Skenario 1 bisa berjalan.
+
+[MODULE 2] MAS IMPLEMENTATION (AGENT SETUP)
+(Bagian ini memuat logika kecerdasan buatan)
+1. Jalankan Cell kedua.
+2. Sistem akan mengaktifkan 3 Class Agent:
+   - ReasonerAgent (Analisis Topologi)
+   - PlannerAgent (Penyusun Strategi)
+   - SearcherAgent (Eksekusi VF2 Algorithm)
+
+[MODULE 3] SIMULATION & TESTING SCENARIOS
+(Bagian ini menjalankan pengujian otomatis)
+1. Jalankan Cell ketiga.
+2. Sistem akan menjalankan 4 Skenario sekaligus:
+   
+   * SKENARIO 1 (Baseline Data): 
+     Mengambil data dari file 'synthetic_graph_data.csv' (Hasil Module 1).
+   
+   * SKENARIO 2, 3, 4 (Scalability Test): 
+     Generate graph otomatis (50, 500, 800 Node) untuk uji performa.
+
+D. CARA MEMBACA HASIL (LOG OUTPUT)
+------------------------------------------------------------------------
+Pantau output di bagian bawah Cell Module 3:
+1. [SETUP]      : Menandakan graph query sudah siap.
+2. [Agent-Name] : Menunjukkan agen sedang bekerja (Real-time).
+3. ✅ STATUS    : SUKSES (Pola ditemukan).
+4. ⏱ DURASI    : Waktu eksekusi pencarian.
+5. 📍 MAPPING    : Lokasi node yang ditemukan cocok.
+
+========================================================================
+Developed by: Kelompok 4
+========================================================================

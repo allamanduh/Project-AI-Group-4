@@ -1,0 +1,75 @@
+import pandas as pd
+import networkx as nx
+import random
+import numpy as np
+
+# ======================================================
+# SOURCE CODE: DATA GENERATION & PRE-PROCESSING
+# Mencakup: 
+# 1. Raw Data Generation (Erdos-Renyi Graph)
+# 2. Data Transformation (Feature Extraction)
+# 3. Data Cleaning (Sampling limit 700 rows)
+# ======================================================
+
+def generate_and_preprocess_data(num_nodes=300):
+    print("🔄 Memulai Generasi & Pre-processing Data...")
+
+    # --- TAHAP 1: DATA GENERATION (Raw Data) ---
+    # Membuat graf acak sebagai data mentah sesuai PPT Slide 2
+    raw_graph = nx.erdos_renyi_graph(n=num_nodes, p=0.1, seed=42)
+    
+    processed_rows = []
+
+    # --- TAHAP 2: DATA TRANSFORMATION (Pre-processing Inti) ---
+    # Mengubah data graf mentah menjadi tabel terstruktur (10 Fitur)
+    for u, v in raw_graph.edges():
+        
+        # A. Feature Extraction (Sensing Topologi)
+        edge_id = f"E-{u}-{v}"
+        deg_source = raw_graph.degree[u] 
+        deg_target = raw_graph.degree[v]
+        clust_coeff = round(nx.clustering(raw_graph, u), 2) # Reasoning
+        
+        # B. Attribute Labeling (Mapping)
+        label_source = random.choice(['A', 'B', 'C', 'D'])
+        
+        # C. Feature Engineering (Derived Attributes)
+        conn_type = 'Strong' if random.random() > 0.5 else 'Weak'
+        # Logika prioritas: High jika kedua node populer
+        priority = 'High' if (deg_source > 5 and deg_target > 5) else 'Low'
+        # Menentukan target label
+        is_pattern = 1 if (label_source == 'A' and conn_type == 'Strong') else 0
+        
+        # Menyusun baris data matang
+        processed_rows.append([
+            edge_id, u, v, 
+            deg_source, deg_target, 
+            clust_coeff, label_source, 
+            conn_type, priority, is_pattern
+        ])
+
+    # Membuat DataFrame
+    columns = [
+        'Edge_ID', 'Source_Node', 'Target_Node', 
+        'Source_Degree', 'Target_Degree', 
+        'Clustering_Coeff', 'Source_Label', 
+        'Connection_Type', 'Search_Priority', 'Is_Pattern_Match'
+    ]
+    df = pd.DataFrame(processed_rows, columns=columns)
+
+    # --- TAHAP 3: DATA CLEANING (Filtering) ---
+    # Memastikan data tidak melebihi batas tugas (Max 700 baris)
+    if len(df) > 700:
+        df = df.sample(700, random_state=42)
+    
+    print("✅ Pre-processing Selesai!")
+    return df
+
+# Eksekusi Fungsi Utama
+df_final = generate_and_preprocess_data(300)
+
+# Simpan hasil ke CSV (Output Pre-processing)
+df_final.to_csv('synthetic_graph_data.csv', index=False)
+
+# Tampilkan Sampel Data
+print(df_final.head())
